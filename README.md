@@ -7,6 +7,8 @@ range to clients. It can output data in JSON as well as Wireguard configuration
 file format and allows working with 'clusters' (groups of servers that share the
 same clients). 
 
+Check out the video here: https://youtu.be/2ERNDbl1VAM
+
 # cableguard_api
 
 `cableguard_api` contains the API, database and rudamentary web interface. You 
@@ -23,5 +25,5 @@ Access the web interface / api through:
 `https://yourserver.com:1443/web/index.html`
 Default login: admin/password
 
-# More information on how to set up full provisioning:
+# More information on the API, how to set up full provisioning, etc check out:
 See the documentation repository: https://github.com/keezel-co/cableguard_documentation
