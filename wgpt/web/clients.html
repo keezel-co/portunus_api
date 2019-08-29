@@ -1,0 +1,223 @@
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha256-CjSoeELFOcH0/uxWu6mC/Vlrc1AARqbm/jiiImDGV3s=" crossorigin="anonymous"></script>
+    <script src="qrcode.min.js"></script>
+    <script src="common.js"></script> 
+</head>
+
+<body>  
+<div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#"><h3>Cableguard</h3></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Servers </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="clusters.html">Clusters</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Clients</a>
+                        </li>
+                    </ul>
+            </div>
+            </nav>
+    <div class="row">
+        <br/><br/>
+    </div>
+    <div class="row">
+        </div>
+        
+    <div class="row">
+        <div class="col-lg-4">
+            <h4>Select instance</h4> 
+        </div>
+        <div class="col-lg-8">
+            <h4>Client overview <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#add-client-modal">Add</button></h4> 
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">            
+            <select class="form-control" id="instance-list">
+            </select>
+        </div>
+        <div class="col-lg-8">
+            <input type="search" id="search-clients" value="" class="form-control" placeholder="Search clients">
+            <table class="table" id="client_table">
+                <thead>
+                    <tr>
+                        <th>IP address</th>
+                        <th>Description</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="add-client-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Add client</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p>Enter optional client description:</p>
+            <input type="text" id="client_description">
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success" id="add-client-modal-btn">Add client</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="deleteModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="delete-modal-title">Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="delete-modal-body">
+
+            </div>
+            <div class="modal-footer" id="delete-modal-footer">
+                <button type="button" class="btn btn-danger" id="delete-modal-btn">Delete</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="wg-config-modal" tabindex="-1" role="dialog" aria-labelledby="wg-config-modal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="delete-modal-title">Wireguard Config</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="wg-config-modal-body">
+            <div id="config-file"></div>
+            <div id="qrcode"></div>
+            </div>
+            <div class="modal-footer" id="delete-modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="wg-display-modal" tabindex="-1" role="dialog" aria-labelledby="wg-display-modal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="delete-modal-title">Wireguard Config</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="wg-config-modal-body">
+                <strong>Overview:</strong>
+                <table id="wg-display-table">
+                    <tr>
+                        <td>Client ip:</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Public key:</td>
+                        <td></td>
+                    </tr>
+                </table>
+                <br/>
+                <div>
+                    <strong>Copy/paste into server config:</strong>
+                </div>
+                <div id="server-config-file"></div>    
+            </div>
+            <div class="modal-footer" id="wg-display-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+
+$(document).ready(function(){
+  
+    /* fill the drop down select */
+    $.get("/api/servers/get/all", populateInstanceSelect);
+    $.get("/api/clusters/get/all", populateInstanceSelect);
+    /* when the selection changes fill the client table */
+    $("#instance-list").change(function() {
+        fetchClients($('#instance-list').val())
+    })
+
+
+    /* when client gets added, check the selection and add client */
+    $("#add-client-modal-btn").click(function(){
+        target = $('#instance-list').val().split('_')[0]
+        id = $('#instance-list').val().split('_')[1]
+
+        if (target == 'server') {
+            json_data = {"server_id":id, "client_description":$("#client_description").val()}
+            url = '/api/clients/add_to_server/' + id
+        } else if (target=='cluster') {
+            url = '/api/clients/add_to_cluster/' + id
+            json_data = {"cluster_id":id, "client_description":$("#client_description").val()}
+        }
+
+        $.ajax(url, {
+            data : JSON.stringify(json_data),
+            contentType: 'application/json',
+            type: 'POST',
+            success: function (data) {
+                $('#config-file').empty();
+                $('#qrcode').empty();
+                configFile = createClientConfigFromJson(target, data)
+                /* If we created for single server we can generate QR code */ 
+                if (target == 'server') {     
+                    new QRCode(document.getElementById("qrcode"), configFile);                
+                }
+                $('#config-file').html('<pre>' + configFile + '</pre>');
+                fetchClients($('#instance-list').val());
+            }
+        })
+        $("#add-client-modal").modal('toggle');
+        $("#wg-config-modal").modal('toggle');
+    });
+
+    $('#delete-modal').on('show.bs.modal', function(e) {
+        var id = $(e.relatedTarget).data('id');
+        var ip = $(e.relatedTarget).data('ip');
+        var delete_type = $(e.relatedTarget).data('type');
+        $('#delete-modal-title').html('Delete ' + delete_type + ' ' + ip);
+        $('#delete-modal-body').html('You are about to delete ' + delete_type + ' with network address ' + ip + '. <br/>This action cannot be undone.<br/><br/>Delete this ' + delete_type + '?');
+        if (delete_type == 'server') {
+            $('#delete-modal-body').append('<br/><br/><b>Note:</b> Deleting a server will also delete all its clients!');
+        }
+        $('#delete-modal-footer').html('<button type="button" class="btn btn-danger" id="delete-modal-btn" onclick="deleteThings(\'' + delete_type + '\',' + id + ');return false;" data-type="' + delete_type + '">Delete ' + delete_type + '</button><button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>');
+    });
+
+});
+
+</script>
+
+</html> 

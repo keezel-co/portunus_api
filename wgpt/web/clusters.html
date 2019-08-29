@@ -1,0 +1,390 @@
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha256-CjSoeELFOcH0/uxWu6mC/Vlrc1AARqbm/jiiImDGV3s=" crossorigin="anonymous"></script>
+    <script src="qrcode.min.js"></script>
+    <script src="common.js"></script> 
+</head>
+
+<body>  
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#"><h3>Cableguard</h3></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Servers </a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="clusters.html">Clusters</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="clients.html">Clients</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="row">
+        <br/><br/>
+    </div>
+            
+    <div class="row">
+            <div class="col-lg-4">
+                <h4>Cluster overview <button type="button" class="btn btn-primary btn-sm" onclick="clearForm('cluster')">New</button></h4> 
+            </div>
+          <div class="col-lg-8">
+            <h4>Cluster settings</h4> 
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">            
+            <table class="table" id="cluster_table">
+                <thead>
+                    <tr>
+                        <th>Host</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>                
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-8">
+            <h5>General settings: <button id="wireguard-modal-btn" data-target="#wireguard-format-modal" data-toggle="modal" type="button" class="btn btn-success btn-sm">Wireguard format</button></h5>
+            <input type="hidden" id="id">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group mx-sm-3 mb-2">
+                        <input type="text" class="form-control form-control-sm" id="cluster_description" placeholder="Cluster description">
+                        <small class="form-text text-muted">Enter name/description for cluster.</small>
+                    </div>
+                </div>
+            </div>
+            <h5>Network settings:</h5>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group mx-sm-3 mb-2">
+                        <input type="text" class="form-control form-control-sm" id="cluster_networkv4" placeholder="Enter IPv4 network for server">
+                        <small class="form-text text-muted">Wireguard IPv4 network, e.g. 10.0.0.0/24.</small>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group mx-sm-3 mb-2">
+                        <input type="text" class="form-control form-control-sm" id="cluster_networkv6" placeholder="Enter IPv6 network for server">
+                        <small class="form-text text-muted">Wireguard IPv6 network, e.g. 2001:db00::0/24.</small>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group mx-sm-3 mb-2">
+                        <input type="text" class="form-control form-control-sm" id="cluster_port" placeholder="Enter Wireguard port number">
+                        <small class="form-text text-muted">Port Wireguard runs on (51820 when left blank).</small>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group mx-sm-3 mb-2">
+                        <input type="text" class="form-control form-control-sm" id="cluster_dns" placeholder="Enter DNS server (optional)">
+                        <small class="form-text text-muted">Enter DNS server for tunnel (optional)</small>
+                    </div>                
+                </div>
+            </div>
+
+            <h5>Wireguard Settings</h5>
+            <div class="row mx-0">
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" class="form-control form-control-sm" id="cluster_privkey" placeholder="Enter private key">
+                        <small class="form-text text-muted">Private key of the server (will be generated if left empty).</small>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" class="form-control form-control-sm" id="cluster_pubkey" placeholder="Enter public key">
+                        <small class="form-text text-muted">Public key of the server (will be generated if left empty).</small>
+                    </div>                                  
+                </div>
+            </div>
+            <div class="row mx-0">
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" class="form-control form-control-sm" id="cluster_postup" placeholder="Enter post-up commands (optional)">
+                        <small id="emailHelp" class="form-text text-muted">Post-up command to execute for server (optional).</small>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" class="form-control form-control-sm" id="cluster_postdown" placeholder="Enter post-down commands (optional)">
+                        <small id="emailHelp" class="form-text text-muted">Post-down command to execute for server (optional).</small>
+                    </div>
+                </div>
+            </div>
+            <div class="row mx-0">
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" class="form-control form-control-sm" id="cluster_persistentkeepalive" placeholder="Enter PersistentKeepalive value">
+                        <small id="emailHelp" class="form-text text-muted">Enter PersistentKeepalive value, e.g. 21 (optional).</small>
+                    </div>  
+                </div>
+                <div class="col">
+                    <button id="add-cluster-form-btn" type="button" class="btn btn-success">Add cluster</button>
+                    <button id="update-cluster-form-btn" type="button" class="btn btn-success">Update cluster</button>
+                </div>
+            </div>
+            <div id="cluster-servers">
+                <div class="row mx-0">
+                    <h4>Cluster servers: <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#add-server-to-cluster-modal">Add cluster server</button></h4> </h4>
+                </div>
+                <div class="row mx-0">
+                    <div class="col">
+                        <table class="table" id="server_table">
+                            <thead>
+                                <tr>
+                                    <th>Host</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>                
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="delete-modal-title">Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="delete-modal-body">
+
+            </div>
+            <div class="modal-footer" id="delete-modal-footer">
+                <button type="button" class="btn btn-danger" id="delete-modal-btn">Delete</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="message-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="delete-modal-title">Message</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="message-modal-body">
+
+            </div>
+            <div class="modal-footer" id="delete-modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="wireguard-format-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="delete-modal-title">Wireguard format</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="message-modal-body">
+                <textarea id="wireguard-config" class="form-control" rows="20"></textarea>
+            </div>
+            <div class="modal-footer" id="delete-modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="add-server-to-cluster-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="add-cluster-modal-title">Add Server to Cluster</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
+            </div>
+            <form id="server_form">
+            <div class="modal-body">
+                    <input type="hidden" id="id">
+                    <input type="hidden" id="cluster_id">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="server_description" placeholder="Enter server description">
+                    <small class="form-text text-muted">Enter name/description for server.</small>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="server_country" placeholder="Enter server country (optional)">
+                    <small class="form-text text-muted">Enter country location for server, e.g. 'Netherlands' or 'NL'</small>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="server_city" placeholder="Enter server city (optional)">
+                    <small class="form-text text-muted">Enter city location for server, e.g. 'Amsterdam' or 'AMS'.</small>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="server_ip" placeholder="Enter public host or ip for server">
+                    <small class="form-text text-muted">The public ip or hostname of the server.</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="add-server-to-cluster-modal-btn" type="button" class="btn btn-success">Add server to cluster</button>
+                <button id="update-server-to-cluster-modal-btn" type="button" class="btn btn-success">Update server</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+<script>
+
+$(document).ready(function(){
+
+    $("#add-cluster-form-btn").click(function(){
+        json_data = {
+                "cluster_description": $("#cluster_description").val(),
+                "cluster_networkv4" : $("#cluster_networkv4").val(),
+                "cluster_networkv6" : $("#cluster_networkv6").val(),
+                "cluster_port" : $("#cluster_port").val(),
+                "cluster_dns" : $("#cluster_dns").val(),
+                "cluster_privkey" : $("#cluster_privkey").val(),
+                "cluster_pubkey" : $("#cluster_pubkey").val(),
+                "cluster_postup" : $("#cluster_postup").val(),
+                "cluster_postdown" : $("#cluster_postdown").val(),
+                "cluster_persistentkeepalive" : $("#cluster_persistentkeepalive").val()
+            }
+        $.ajax('/api/clusters/add', {
+            data : JSON.stringify(json_data, nullIfEmpty),
+            contentType: 'application/json',
+            type: 'POST',
+            success: function (data) {
+                if (data.message) { 
+                    displayMessage(data.message);
+                } else {
+                    populateClusters()
+                    getClusterConfig(data.data['id'])
+                }
+            }
+        })
+    });
+  
+    $("#update-server-to-cluster-modal-btn").click(function(){
+        json_data = {
+            "id" : $("#id").val(),
+            "server_description" : $("#server_description").val(),
+            "server_city" : $("#server_city").val(),
+            "server_country" : $("#server_country").val(),
+        }
+        $.ajax('/api/servers/update_to_cluster/' + $('#id').val(), {
+            data : JSON.stringify(json_data, nullIfEmpty),
+            contentType: 'application/json',
+            type: 'POST',
+            success: function (data) {
+                if (data.message) {
+                    displayMessage(data.message)
+                }
+            }
+        })
+        $("#add-server-to-cluster-modal").modal('toggle');
+        $("#update-server-to-cluster-modal-btn").show();
+        $("#add-server-to-cluster-modal-btn").show();
+    });
+
+    $("#add-server-to-cluster-modal-btn").click(function(){
+        json_data = {
+            "server_description" : $("#server_description").val(),
+            "server_city" : $("#server_city").val(),
+            "server_country" : $("#server_country").val(),
+            "server_ip" : $("#server_ip").val(),
+            "cluster_id" : $("#cluster_id").val()
+        }
+        $.ajax('/api/servers/add_to_cluster/' + $('#cluster_id').val(), {
+            data : JSON.stringify(json_data, nullIfEmpty),
+            contentType: 'application/json',
+            type: 'POST',
+            success: function (data) {
+                if (data.message) {
+                    displayMessage(data.message)
+                }
+            }
+        })
+        $("#add-server-to-cluster-modal").modal('toggle');
+        populateServersForCluster($('#cluster_id').val());
+    });
+  
+
+    $("#update-cluster-form-btn").click(function(){
+        json_data = {
+            "id":$('#id').val(),
+            "cluster_description":$('#cluster_description').val(),
+            "cluster_postup":$('#cluster_postup').val(),
+            "cluster_postdown":$('#cluster_postdown').val()
+        }
+        $.ajax('/api/clusters/update/' + $('#id').val(), {
+            data : JSON.stringify(json_data, nullIfEmpty),
+            contentType: 'application/json',
+            type: 'POST',
+            success: function (data) {
+                if (data.message) {
+                    displayMessage(data.message);                    
+                } else {
+                    populateClusters()
+                    getClusterConfig(data.data['id'])
+                }
+            }
+        })
+    });
+
+    $('#delete-modal').on('show.bs.modal', function(e) {
+        var id = $(e.relatedTarget).data('id');
+        var ip = $(e.relatedTarget).data('ip');
+        var delete_type = $(e.relatedTarget).data('type');
+        $('#delete-modal-title').html('Delete ' + delete_type + ' ' + ip);
+        $('#delete-modal-body').html('You are about to delete ' + delete_type + ' with network address ' + ip + '. <br/>This action cannot be undone.<br/><br/>Delete this ' + delete_type + '?');
+        if (delete_type == 'server') {
+            $('#delete-modal-body').append('<br/><br/><b>Note:</b> Deleting a server will also delete all its clients!');
+        }
+        $('#delete-modal-footer').html('<button type="button" class="btn btn-danger" id="delete-modal-btn" onclick="deleteThings(\'' + delete_type + '\',' + id + ');return false;" data-type="' + delete_type + '">Delete ' + delete_type + '</button><button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>');
+    });
+
+ 
+
+    $('#server_token_div').hide();
+    $('#wireguard-modal-btn').hide();
+    $('#cluster-servers').hide();
+    $('#update-cluster-form-btn').hide();
+    $("#update-server-to-cluster-modal-btn").hide();
+    populateClusters();
+    
+
+
+});
+
+$('#add-server-to-cluster-modal').on('show.bs.modal', function(e) {
+    $('#server_form').trigger("reset");
+    $( '#server_ip' ).prop( "disabled", false );
+    $("#update-server-to-cluster-modal-btn").hide();
+    $("#add-server-to-cluster-modal-btn").show();        
+});
+
+</script>
+
+</html> 
