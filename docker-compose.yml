@@ -1,7 +1,7 @@
 version: '2.1'
 
 services:
-  cableguard_api:
+  portunus_api:
     build: .
     environment:
       FLASK_APP: wgpt.py
@@ -33,7 +33,7 @@ services:
     ports:
       - "1443:443"
     depends_on:
-      - cableguard_api
+      - portunus_api
     volumes:
       - ./webserver/nginx.conf:/nginx.conf
       - certs:/certs
